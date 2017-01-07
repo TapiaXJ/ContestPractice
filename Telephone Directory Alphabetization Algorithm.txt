@@ -33,6 +33,7 @@ else
 goto loop
 	//loop if both are uppercase, lowercase
 
+//TODO: Have to finish this portion
 number to word(string s1)
 	find numbers
 	if 0: zero

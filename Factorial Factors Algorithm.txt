@@ -7,4 +7,13 @@ find prime numbers between 2 and n //Sieve of Eratosthenes
 for each prime number p
 	for 1 .. logp(n)
 		result += n/(p^i)
+
+Basically, find all the prime factors of all numbers between 2 and n
+by counting all of the multiples of the prime numbers.
+Note: some numbers have the same factor multiple times, 
+so have to go through and count all of those numbers multiple times as well
+
+Count all the multiples of 2 (2,4,8), then 2^2 (4,8,12) then 2^3 (8,16,24) ... etc, 
+then continue with 3 (3,9,12) 3^2 (9,18,27), 3^3 (27, 54, 81) ... etc,
+then with 5 ... etc.
 	
