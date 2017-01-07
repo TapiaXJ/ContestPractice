@@ -19,6 +19,7 @@ int main(){
     int n;
     int result = 0;
 
+    //TODO: Change to read from a file
     cout << "Enter number: ";
     cin >> n;
     bool primes[n+1];
