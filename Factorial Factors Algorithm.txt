@@ -1,0 +1,10 @@
+n!
+
+int result
+
+find prime numbers between 2 and n //Sieve of Eratosthenes
+
+for each prime number p
+	for 1 .. logp(n)
+		result += n/(p^i)
+	

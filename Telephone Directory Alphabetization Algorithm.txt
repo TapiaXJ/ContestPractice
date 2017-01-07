@@ -1,0 +1,44 @@
+compare(string s1, string s2)
+int pos1, pos2 = 7
+
+s1 = number to word(s1)
+s2 = number to word(s2)
+
+loop
+
+if s1[pos1] > s2[pos2]
+	return -1
+else if s1[pos1] < s2[pos2]
+	return 1
+else 
+	pos1++ 
+	pos2++
+
+	if pos1 or pos2 reached the end
+		if both reached the end
+			return 0
+		return that one (-1 or 1)
+
+	if both s1[pos1] and s2[pos2] are special
+		pos1++
+		pos2++
+	else if only one is special
+		return that one(-1 or 1)
+
+	if only one is uppercase
+		return that one(-1 or 1)
+	
+	if one is uppercase and the other special
+		pos of the special ++
+goto loop
+	//loop if both are uppercase, lowercase
+
+number to word(string s1)
+	find numbers
+	if 0: zero
+	if 10 through 19: "ten", "eleven" ...
+	digits from left to right: "nine" "eight" "seven" ...
+	
+	
+		
+		
