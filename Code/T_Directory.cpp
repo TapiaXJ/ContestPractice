@@ -18,15 +18,8 @@ int main(){
 	while(!fin.eof())
 	{
 		getline(fin, data); //reads a single line from the input file
-		for(char* i = data.begin()+7; i!=data.end(); i++){ //write all characters after the 7th to file (name)
-			fout << *i;
-		}
-		for(char* i = data.begin(); i!=data.begin()+7; i++){ //write characters 1-7 to file (phonenumber)
-			fout << *i;
-			if(i==data.begin()+2){ //add a space after the first 3 digits of the phone number
-				fout << " ";
-			}
-		}
+		fout << data.substr(7, data.length());
+		fout << data.substr(0,3) << " " << data.substr(3,4);
 		if(!fin.eof()){
 			fout << endl;
 		}
