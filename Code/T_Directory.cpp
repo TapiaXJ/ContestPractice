@@ -100,7 +100,7 @@ string nine_digit_num(string& num){
 	while(num.length()<9){
 		num.insert(0, "0");
 	}
-	string millions = num.substr(1,3);
+	string millions = num.substr(0,3);
 	string thousands = num.substr(3,3);
 	string hundreds = num.substr(6,3);
 
