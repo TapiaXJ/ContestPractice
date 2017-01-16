@@ -13,40 +13,50 @@ for each prime number p
 
 #include <iostream>
 #include <cmath>
+#include <fstream>
+
 using namespace std;
 
 int main(){
     int n;
-    int result = 0;
+    int result;
+    ifstream fin;
+    ofstream fout;
+    
+    fin.open("factorialInput.txt");
+    fout.open("factorialOutput.txt");
 
-    //TODO: Change to read from a file
-    cout << "Enter number: ";
-    cin >> n;
-    bool primes[n+1];
+    while(fin >> n){
+        result = 0;
+        bool primes[n+1];
 
-    for(int i = 0; i < n+1; i++){
-        primes[i] = true;
-    }
-
-    primes[0] = false;
-    primes[1] = false;
-
-    int p = 2;
-
-    while(p <= n){
-        for(int i = p+p; i < n + 1; i += p){
-            primes[i] = false;
+        for(int i = 0; i < n+1; i++){
+            primes[i] = true;
         }
 
-        int maxI = log(n)/log(p);
-        for(int i = 1; i < maxI + 1; i++){
-            result += n/(pow(p, i));
+        primes[0] = false;
+        primes[1] = false;
+
+        int p = 2;
+
+        while(p <= n){
+            for(int i = p+p; i < n + 1; i += p){
+                primes[i] = false;
+            }
+
+            int maxI = log(n)/log(p);
+            for(int i = 1; i < maxI + 1; i++){
+                result += n/(pow(p, i));
+            }
+
+            do{
+                p++;
+            } while(primes[p] == false);
         }
 
-        do{
-            p++;
-        } while(primes[p] == false);
+        fout << result << endl;
     }
 
-    cout << "Result is: " << result << endl;
+    fin.close();
+    fout.close();
 }
