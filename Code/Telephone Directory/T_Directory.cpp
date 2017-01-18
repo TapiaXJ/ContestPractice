@@ -8,11 +8,16 @@ using namespace std;
 
 void fileLine_to_vector(string, vector<string>&);
 void vector_to_file(string, vector<string>&);
+
 void alphabetize(vector<string>&);
-int compare_strings(string, string);
+bool compare_strings(string&, string&);
+
 void number_to_word(string&);
 string nine_digit_num(string&);
 string three_digit_num(string&);
+
+void special_to_spaces(string& s1); // changes any special character to spaces
+
 
 int main(){
 
@@ -23,14 +28,9 @@ int main(){
 	
 	//read data into vector line by line
 	fileLine_to_vector(inputFile, data);
-	for(int i=0; i<data.size();i++){
-		cout << data[i] << endl;
-	}
 
 	//**perform algorithm here**
 	alphabetize(data);
-
-
 
 	//write output to file
 	vector_to_file(outputFile, data);
@@ -66,14 +66,55 @@ void vector_to_file(string filename, vector<string> &data){
 }
 
 void alphabetize(vector<string> &data){
-
+	bool swap;
+	string temp, t1, t2;
+	for(int i=0; i<data.size(); i++){
+		for(int j=(i+1); j<data.size(); j++){
+			t1 = data[i].substr(7, data[i].length());
+			t2 = data[j].substr(7, data[j].length());
+			swap = compare_strings(t1, t2); //pass characters after the phone numbers of the two entries
+			if(swap){
+				temp = data[i];
+				data[i] = data[j];
+				data[j] = temp;
+			}
+		}
+	} 
 }
 
-int compare_strings(string s1, string s2){
+bool compare_strings(string& s1, string& s2){
 	int pos1, pos2 = 0;
-	number_to_word(s1);
-	number_to_word(s2);
+	string p1, p2;
+	p1=s1;
+	p2=s2;
+	number_to_word(p1);
+	number_to_word(p2);
+	special_to_spaces(p1);
+	special_to_spaces(p2);
 
+
+	for (pos1 = 0; pos1 < p1.size();) {
+		for (pos2 = 0; pos2 < p2.size();) {
+    		if(p1[pos1] > p2[pos2]){
+    			return true;
+    		}
+    		else if(p1[pos1] < p2[pos2]){
+    			return false;
+    		}
+			else {
+				pos1++ ; pos2++;
+			}
+		}
+    }
+    return false;
+}
+
+void special_to_spaces(string& s1){
+	for(char* i=s1.begin(); i<s1.end(); i++){
+		if(!(*i > 97 && *i < 122 || *i > 65 && *i < 90)){
+			*i = 'z';
+		}
+	}
 }
 
 //converts and replaces the numbers in a string with their word equivalent
@@ -193,8 +234,6 @@ string three_digit_num(string& number){
 	
 	return word;
 }
-
-
 
 
 
