@@ -8,7 +8,8 @@ using namespace std;
 
 void fileLine_to_vector(string, vector<string>&);
 void vector_to_file(string, vector<string>&);
-void compare_strings(string, string);
+void alphabetize(vector<string>&);
+int compare_strings(string, string);
 void number_to_word(string&);
 string nine_digit_num(string&);
 string three_digit_num(string&);
@@ -22,13 +23,14 @@ int main(){
 	
 	//read data into vector line by line
 	fileLine_to_vector(inputFile, data);
+	for(int i=0; i<data.size();i++){
+		cout << data[i] << endl;
+	}
 
 	//**perform algorithm here**
-	for(int i=0; i<data.size();i++){ //replaces all numbers with word equivalents
-		temp = data[i].substr(7, data[i].length());
-		number_to_word(temp);
-		data[i].replace(7,data[i].length(),temp);
-	}
+	alphabetize(data);
+
+
 
 	//write output to file
 	vector_to_file(outputFile, data);
@@ -63,8 +65,15 @@ void vector_to_file(string filename, vector<string> &data){
 	fout.close();
 }
 
-void compare_strings(string s1, string s2){
-	int pos1, pos2 = 7;
+void alphabetize(vector<string> &data){
+
+}
+
+int compare_strings(string s1, string s2){
+	int pos1, pos2 = 0;
+	number_to_word(s1);
+	number_to_word(s2);
+
 }
 
 //converts and replaces the numbers in a string with their word equivalent
@@ -184,6 +193,7 @@ string three_digit_num(string& number){
 	
 	return word;
 }
+
 
 
 
