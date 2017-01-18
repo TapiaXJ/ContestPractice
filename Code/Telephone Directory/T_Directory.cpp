@@ -18,12 +18,14 @@ string three_digit_num(string&);
 
 void special_to_spaces(string& s1); // changes any special character to spaces
 
+void string_to_lower(string&); //this function makes a string all lower case
+void char_to_lower(char&);
+
 
 int main(){
 
 	string inputFile = ("rawData.txt");
 	string outputFile = ("outputData.txt");
-	string temp; //string container
 	vector<string> data; //data vector
 	
 	//read data into vector line by line
@@ -59,14 +61,17 @@ void vector_to_file(string filename, vector<string> &data){
 		fout << setiosflags(ios::left);
 		fout << setw(52) << data[i].substr(7, data[i].length()).c_str();
 		fout << setw(3) << " ";
-		fout << data[i].substr(0,3) << " " << data[i].substr(3,4) << endl; //phone number
+		fout << data[i].substr(0,3) << " " << data[i].substr(3,4); //phone number
+		if(i != data.size()-1){
+			fout << endl;
+		}
 		data[i].erase(data[i].begin(), data[i].end());
 	} 
 	fout.close();
 }
 
 void alphabetize(vector<string> &data){
-	bool swap;
+	bool swap = false;
 	string temp, t1, t2;
 	for(int i=0; i<data.size(); i++){
 		for(int j=(i+1); j<data.size(); j++){
@@ -82,19 +87,18 @@ void alphabetize(vector<string> &data){
 	} 
 }
 
-bool compare_strings(string& s1, string& s2){
-	int pos1, pos2 = 0;
-	string p1, p2;
-	p1=s1;
-	p2=s2;
+bool compare_strings(string& p1, string& p2){
+	//prepare strings for comparison
 	number_to_word(p1);
 	number_to_word(p2);
 	special_to_spaces(p1);
 	special_to_spaces(p2);
+	string_to_lower(p1);
+	string_to_lower(p2);
 
-
-	for (pos1 = 0; pos1 < p1.size();) {
-		for (pos2 = 0; pos2 < p2.size();) {
+	//comparison logic
+	for (int pos1 = 0; pos1 < p1.size();) {
+		for (int pos2 = 0; pos2 < p2.size();) {
     		if(p1[pos1] > p2[pos2]){
     			return true;
     		}
@@ -110,10 +114,30 @@ bool compare_strings(string& s1, string& s2){
 }
 
 void special_to_spaces(string& s1){
+	int counter=0;
 	for(char* i=s1.begin(); i<s1.end(); i++){
-		if(!(*i > 97 && *i < 122 || *i > 65 && *i < 90)){
-			*i = 'z';
+		if(!(*i >= 97 && *i <= 122 || *i >= 65 && *i <= 90)){
+			*i = ' ';
 		}
+		if(counter>0){
+			if(*(i-1)>=65 && *(i-1)<=90 && *i>=65 && *i<=90){
+				s1.insert(s1.begin()+counter, ' ');
+			}
+		}
+		counter++;
+	}
+
+}
+
+void string_to_lower(string &data){
+	for(char* i=data.begin(); i<data.end(); i++){
+		char_to_lower(*i);
+	}
+}
+
+void char_to_lower(char &data){
+	if(data >= 'A' && data <= 'Z'){
+		data += 32;
 	}
 }
 
@@ -234,7 +258,4 @@ string three_digit_num(string& number){
 	
 	return word;
 }
-
-
-
 
