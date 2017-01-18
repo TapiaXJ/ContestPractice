@@ -1,3 +1,8 @@
+/*
+Author: Michael Bridges
+Purpose: solve ACM contest problem socalcontest.org/current/prev_probs/fonebook.htm
+*/
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
