@@ -8,27 +8,31 @@ using namespace std;
 
 void fileLine_to_vector(string, vector<string>&);
 void vector_to_file(string, vector<string>&);
-void compare_strings(string, string);
+
+void alphabetize(vector<string>&);
+bool compare_strings(string&, string&);
+
 void number_to_word(string&);
 string nine_digit_num(string&);
 string three_digit_num(string&);
+
+void special_to_spaces(string& s1); // changes any special character to spaces
+
+void string_to_lower(string&); //this function makes a string all lower case
+void char_to_lower(char&);
+
 
 int main(){
 
 	string inputFile = ("rawData.txt");
 	string outputFile = ("outputData.txt");
-	string temp; //string container
 	vector<string> data; //data vector
 	
 	//read data into vector line by line
 	fileLine_to_vector(inputFile, data);
 
 	//**perform algorithm here**
-	for(int i=0; i<data.size();i++){ //replaces all numbers with word equivalents
-		temp = data[i].substr(7, data[i].length());
-		number_to_word(temp);
-		data[i].replace(7,data[i].length(),temp);
-	}
+	alphabetize(data);
 
 	//write output to file
 	vector_to_file(outputFile, data);
@@ -57,14 +61,84 @@ void vector_to_file(string filename, vector<string> &data){
 		fout << setiosflags(ios::left);
 		fout << setw(52) << data[i].substr(7, data[i].length()).c_str();
 		fout << setw(3) << " ";
-		fout << data[i].substr(0,3) << " " << data[i].substr(3,4) << endl; //phone number
+		fout << data[i].substr(0,3) << " " << data[i].substr(3,4); //phone number
+		if(i != data.size()-1){
+			fout << endl;
+		}
 		data[i].erase(data[i].begin(), data[i].end());
 	} 
 	fout.close();
 }
 
-void compare_strings(string s1, string s2){
-	int pos1, pos2 = 7;
+void alphabetize(vector<string> &data){
+	bool swap = false;
+	string temp, t1, t2;
+	for(int i=0; i<data.size(); i++){
+		for(int j=(i+1); j<data.size(); j++){
+			t1 = data[i].substr(7, data[i].length());
+			t2 = data[j].substr(7, data[j].length());
+			swap = compare_strings(t1, t2); //pass characters after the phone numbers of the two entries
+			if(swap){
+				temp = data[i];
+				data[i] = data[j];
+				data[j] = temp;
+			}
+		}
+	} 
+}
+
+bool compare_strings(string& p1, string& p2){
+	//prepare strings for comparison
+	number_to_word(p1);
+	number_to_word(p2);
+	special_to_spaces(p1);
+	special_to_spaces(p2);
+	string_to_lower(p1);
+	string_to_lower(p2);
+
+	//comparison logic
+	for (int pos1 = 0; pos1 < p1.size();) {
+		for (int pos2 = 0; pos2 < p2.size();) {
+    		if(p1[pos1] > p2[pos2]){
+    			return true;
+    		}
+    		else if(p1[pos1] < p2[pos2]){
+    			return false;
+    		}
+			else {
+				pos1++ ; pos2++;
+			}
+		}
+    }
+    return false;
+}
+
+void special_to_spaces(string& s1){
+	int counter=0;
+	for(char* i=s1.begin(); i<s1.end(); i++){
+		if(!(*i >= 97 && *i <= 122 || *i >= 65 && *i <= 90)){
+			*i = ' ';
+		}
+		if(counter>0){
+			if(*(i-1)>=65 && *(i-1)<=90 && *i>=65 && *i<=90){
+				s1.insert(s1.begin()+counter, ' ');
+			}
+		}
+		counter++;
+	}
+
+}
+
+void string_to_lower(string &data){
+	for(char* i=data.begin(); i<data.end(); i++){
+		char_to_lower(*i);
+	}
+}
+
+void char_to_lower(char &data){
+	if(data >= 'A' && data <= 'Z'){
+		data += 32;
+	}
 }
 
 //converts and replaces the numbers in a string with their word equivalent
@@ -184,8 +258,4 @@ string three_digit_num(string& number){
 	
 	return word;
 }
-
-
-
-
 
