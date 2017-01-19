@@ -1,0 +1,2 @@
+compile: g++ -o tdir T_Directory.cpp
+run: ./tdir < rawData.txt
