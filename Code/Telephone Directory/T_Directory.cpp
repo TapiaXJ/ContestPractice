@@ -1,30 +1,33 @@
 /*
-Author: Michael Bridges
 Purpose: solve ACM contest problem socalcontest.org/current/prev_probs/fonebook.htm
 */
 
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+//#include <sstream>
 #include <string>
 #include <vector>
 #include <math.h>
 using namespace std;
 
-void fileLine_to_vector(string, vector<string>&);
-void vector_to_file(string, vector<string>&);
+void fileLine_to_vector(string&, vector<string>&);
+void input_to_vector(vector<string>&);
+
+void vector_to_file(string&, vector<string>&);
+void print_vector(vector<string>&);
 
 void alphabetize(vector<string>&);
-bool compare_strings(string&, string&);
+	bool compare_strings(string&, string&);
 
-void number_to_word(string&);
-string nine_digit_num(string&);
-string three_digit_num(string&);
+	void number_to_word(string&);
+		void nine_digit_num(string&);
+			void three_digit_num(string&);
 
-void special_to_spaces(string& s1); // changes any special character to spaces
+	void special_to_spaces(string&); // changes any special character to spaces
 
-void string_to_lower(string&); //this function makes a string all lower case
-void char_to_lower(char&);
+	void string_to_lower(string&); //this function makes a string all lower case
+		void char_to_lower(char&);
 
 
 int main(){
@@ -34,19 +37,20 @@ int main(){
 	vector<string> data; //data vector
 	
 	//read data into vector line by line
-	fileLine_to_vector(inputFile, data);
+	//fileLine_to_vector(inputFile, data);
+	input_to_vector(data);
 
 	//**perform algorithm here**
 	alphabetize(data);
 
 	//write output to file
-	vector_to_file(outputFile, data);
+	print_vector(data);
 	
 	return 0;
 }
 
 //reads from a file line by line into a vector
-void fileLine_to_vector(string filename, vector<string> &fileData){
+void fileLine_to_vector(string& filename, vector<string> &fileData){
 	string data;
 	ifstream fin;
 	fin.open(filename.data());
@@ -57,7 +61,24 @@ void fileLine_to_vector(string filename, vector<string> &fileData){
 	fin.close();
 }
 
-void vector_to_file(string filename, vector<string> &data){
+void input_to_vector(vector<string> &inputdata){
+	//use getline and istringstream
+	string data, temp;
+	while(cin >> temp){
+		data.append(temp);
+		data.append(" ");
+		/*
+		if(data[data.length()]=='\n'){
+			inputdata.push_back(data);
+			cout << data << endl;
+			data.erase(data.begin(),data.end());
+		}
+		*/
+		cout << data << endl;
+	}
+}
+
+void vector_to_file(string& filename, vector<string> &data){
 	ofstream fout;	
 	fout.open(filename.data());
 	for(int i=0; i<data.size(); i++)
@@ -70,9 +91,24 @@ void vector_to_file(string filename, vector<string> &data){
 		if(i != data.size()-1){
 			fout << endl;
 		}
-		data[i].erase(data[i].begin(), data[i].end());
+		//data[i].erase(data[i].begin(), data[i].end());
 	} 
 	fout.close();
+}
+
+void print_vector(vector<string> &data){
+	for(int i=0; i<data.size(); i++)
+	{
+		cout << resetiosflags(ios::adjustfield);
+		cout << setiosflags(ios::left);
+		cout << setw(52) << data[i].substr(7, data[i].length()).c_str();
+		cout << setw(3) << " ";
+		cout << data[i].substr(0,3) << " " << data[i].substr(3,4); //phone number
+		if(i != data.size()-1){
+			cout << endl;
+		}
+		//data[i].erase(data[i].begin(), data[i].end());
+	} 
 }
 
 void alphabetize(vector<string> &data){
@@ -120,12 +156,12 @@ bool compare_strings(string& p1, string& p2){
 
 void special_to_spaces(string& s1){
 	int counter=0;
-	for(char* i=s1.begin(); i<s1.end(); i++){
-		if(!(*i >= 97 && *i <= 122 || *i >= 65 && *i <= 90)){
-			*i = ' ';
+	for(int i=0; i<s1.length(); i++){
+		if(!(s1[i] >= 97 && s1[i] <= 122 || s1[i] >= 65 && s1[i] <= 90)){
+			s1[i] = ' ';
 		}
 		if(counter>0){
-			if(*(i-1)>=65 && *(i-1)<=90 && *i>=65 && *i<=90){
+			if(s1[i-1]>=65 && s1[i-1]<=90 && s1[i]>=65 && s1[i]<=90){
 				s1.insert(s1.begin()+counter, ' ');
 			}
 		}
@@ -135,8 +171,8 @@ void special_to_spaces(string& s1){
 }
 
 void string_to_lower(string &data){
-	for(char* i=data.begin(); i<data.end(); i++){
-		char_to_lower(*i);
+	for(int i=0; i<data.length(); i++){
+		char_to_lower(data[i]);
 	}
 }
 
@@ -150,30 +186,37 @@ void char_to_lower(char &data){
 void number_to_word(string& num){
 	string toWord, temp;
 	int counter=0, index=0;
+	bool flag = false;
 	for(int i=0; i<num.length(); i++){
 		if(num[i] >= 48 && num[i] <= 57){
 			temp = num[i];
 			toWord.append(temp);
 			counter++;
-			if(index==0){
-				index==i;
+			if(!flag){
+				index=i;
+				flag=true;
 			}
 		}
 	}
-	if(counter!=0){
-		temp = nine_digit_num(toWord);
-		num.replace(index,counter+1,temp);
-	}
-	
+	if(counter>1){		
+		nine_digit_num(toWord);
+		if(index!=0){
+			temp = " ";
+			temp.append(toWord);
+			num.replace(index-1,counter+2,temp);
+		}
+		else{
+			num.replace(index,counter+1,toWord);
+		}
+	}	
 }
 
 //converts up to a 9 digit number as a string to it's word equivalent
-string nine_digit_num(string& num){
+void nine_digit_num(string& num){
 	//pass in a number from the range 0-999,999,999
 	string thousand = "thousand ";
 	string million = "million ";
 
-	string temp;
 	string word;
 
 	while(num.length()<9){
@@ -183,23 +226,27 @@ string nine_digit_num(string& num){
 	string thousands = num.substr(3,3);
 	string hundreds = num.substr(6,3);
 
-	temp = three_digit_num(millions); //checks the millions place
-	if(temp != "zero "){
-		word.append(temp);
+	//temp = three_digit_num(millions); //checks the millions place
+	three_digit_num(millions);
+	if(millions != "zero "){
+		word.append(millions);
 		word.append(million);
 	}
-	temp = three_digit_num(thousands); //checks the thousands place
-	if(temp != "zero "){
-		word.append(temp);
+	//temp = three_digit_num(thousands); //checks the thousands place
+	three_digit_num(thousands);
+	if(thousands != "zero "){	
+		word.append(thousands);
 		word.append(thousand);
 	}
-	word.append(three_digit_num(hundreds)); //checks the hundreds place
-	
-	return word;
+	three_digit_num(hundreds);
+	word.append(hundreds); //checks the hundreds place
+
+	num.resize(word.size());
+	num = word;
 }
 
 //converts up to a 3 digit number to it's word equivalent
-string three_digit_num(string& number){
+void three_digit_num(string& number){
 	string onesNames[] = {"zero ", "one ", "two ", "three ", "four ", "five ", "six ", "seven ", "eight ", "nine "};
 	string teensNames[] = {"ten ", "eleven ", "twleve ", "thirteen ", "fourteen ", "fifteen ", "sixteen ", "seventeen ", "eighteen ", "nineteen "};
 	string tensNames[] = {"ten ", "twenty ", "thirty ", "fourty ", "fifty ", "sixty ", "seventy ", "eighty ", "ninety "}; 
@@ -260,7 +307,6 @@ string three_digit_num(string& number){
 	if(number.length()==1 && number[0]=='0'){ //if the number is 1 digit and zero
 		word.append(onesNames[number[0]-48]);
 	}
-	
-	return word;
+	number.resize(word.size());
+	number=word;
 }
-
