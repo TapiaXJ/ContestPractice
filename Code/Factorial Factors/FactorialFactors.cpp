@@ -20,13 +20,8 @@ using namespace std;
 int main(){
     int n;
     int result;
-    ifstream fin;
-    ofstream fout;
-    
-    fin.open("factorialInput.txt");
-    fout.open("factorialOutput.txt");
 
-    while(fin >> n){
+    while(cin >> n){
         result = 0;
         bool primes[n+1];
 
@@ -54,9 +49,6 @@ int main(){
             } while(primes[p] == false);
         }
 
-        fout << result << endl;
+        cout << result << endl;
     }
-
-    fin.close();
-    fout.close();
 }
