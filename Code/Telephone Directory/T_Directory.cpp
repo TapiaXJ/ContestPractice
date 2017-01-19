@@ -32,8 +32,8 @@ void alphabetize(vector<string>&);
 
 int main(){
 
-	string inputFile = ("rawData.txt");
-	string outputFile = ("outputData.txt");
+	//string inputFile = ("rawData.txt");
+	//string outputFile = ("outputData.txt");
 	vector<string> data; //data vector
 	
 	//read data into vector line by line
@@ -44,6 +44,7 @@ int main(){
 	alphabetize(data);
 
 	//write output to file
+	//vector_to_file(outputFile, data);
 	print_vector(data);
 	
 	return 0;
@@ -63,18 +64,12 @@ void fileLine_to_vector(string& filename, vector<string> &fileData){
 
 void input_to_vector(vector<string> &inputdata){
 	//use getline and istringstream
-	string data, temp;
-	while(cin >> temp){
-		data.append(temp);
-		data.append(" ");
-		/*
-		if(data[data.length()]=='\n'){
-			inputdata.push_back(data);
-			cout << data << endl;
-			data.erase(data.begin(),data.end());
+	string temp;
+	while(getline(cin, temp)){
+		if(temp[temp.size()-1]=='\r'){
+			temp.erase(temp.size()-1);
 		}
-		*/
-		cout << data << endl;
+		inputdata.push_back(temp);
 	}
 }
 
@@ -91,7 +86,6 @@ void vector_to_file(string& filename, vector<string> &data){
 		if(i != data.size()-1){
 			fout << endl;
 		}
-		//data[i].erase(data[i].begin(), data[i].end());
 	} 
 	fout.close();
 }
@@ -101,13 +95,10 @@ void print_vector(vector<string> &data){
 	{
 		cout << resetiosflags(ios::adjustfield);
 		cout << setiosflags(ios::left);
-		cout << setw(52) << data[i].substr(7, data[i].length()).c_str();
-		cout << setw(3) << " ";
-		cout << data[i].substr(0,3) << " " << data[i].substr(3,4); //phone number
-		if(i != data.size()-1){
-			cout << endl;
-		}
-		//data[i].erase(data[i].begin(), data[i].end());
+		cout << setw(52) << data[i].substr(7, string::npos).c_str();
+		cout << setw(3) << ' ';
+		cout << data[i].substr(0,3) << ' ' << data[i].substr(3,4); //phone number
+		cout << endl;
 	} 
 }
 
