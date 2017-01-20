@@ -128,13 +128,27 @@ bool compare_strings(string& p1, string& p2){
 	string_to_lower(p1);
 	string_to_lower(p2);
 
+	int spaces1=0, spaces2=0;
 	//comparison logic
 	for (int pos1 = 0; pos1 < p1.size();) {
 		for (int pos2 = 0; pos2 < p2.size();) {
-    		if(p1[pos1] > p2[pos2]){
+			//keep count of spaces
+			if(p1[pos1]==' '){
+				spaces1++;
+			}else{
+				spaces1=0;
+			}
+			if(p2[pos2]==' '){
+				spaces2++;
+			}else{
+				spaces2=0;
+			}
+
+			//simple comparison logic using character values
+    		if(p1[pos1] > p2[pos2] && spaces2<=1){
     			return true;
     		}
-    		else if(p1[pos1] < p2[pos2]){
+    		else if(p1[pos1] < p2[pos2] && spaces1<=1){
     			return false;
     		}
 			else {
@@ -142,6 +156,7 @@ bool compare_strings(string& p1, string& p2){
 			}
 		}
     }
+ 
     return false;
 }
 
@@ -263,7 +278,21 @@ void three_digit_num(string& number){
 			word.append(onesNames[number[2]-48]);
 		}
 	}
-	if(number.length()==2 && number[0]!='0'){ //if the number is 2 digits
+	else if(number.length()==3 && number[0]=='0'){ //if the number is 3 digits with a leading zero
+		if(number[1]=='0'){ //if the number is 3 digits with two leading zeros
+			word.append(onesNames[number[2]-48]);
+		}
+		else if(number[1]=='1'){
+			word.append(teensNames[number[2]-48]);
+		}
+		else{
+			word.append(tensNames[number[1]-49]);
+			if(number[2]!= '0'){
+				word.append(onesNames[number[2]-48]);
+			}
+		}
+	}
+	else if(number.length()==2 && number[0]!='0'){ //if the number is 2 digits
 		if(number[0]=='1'){
 			word.append(teensNames[number[1]-48]);
 		}
@@ -274,30 +303,12 @@ void three_digit_num(string& number){
 			word.append(onesNames[number[1]-48]);
 		}
 	}
-	if(number.length()==1 && number[0]!=0){ //if the number is 1 digit
-		word.append(onesNames[number[0]-48]);
-	}
-	if(number.length()==3 && number[0]=='0'){ //if the number is 3 digits with a leading zero
-		if(number[1]=='0'){ //if the number is 3 digits with two leading zeros
-			word.append(onesNames[number[2]-48]);
-		}
-		else if(number[1]=='1'){
-			word.append(teensNames[number[2]-48]);
-		}
-		else{
-			word.append(tensNames[number[1]-49]);
-			word.append(onesNames[number[2]-48]);
-		}
-	}
-	if(number.length()==2 && number[0]=='0'){ //if the number is 2 digits with leading zero
-		if(number[1]=='0'){ //if the number is two digits and all zeros
-			word.append(onesNames[number[1]-48]);
-		}
+	else if(number.length()==2 && number[0]=='0'){ //if the number is 2 digits with leading zero
 		word.append(onesNames[number[1]-48]);
 	}
-	if(number.length()==1 && number[0]=='0'){ //if the number is 1 digit and zero
+	else if(number.length()==1){ //if the number is 1 digit
 		word.append(onesNames[number[0]-48]);
 	}
 	number.resize(word.size());
-	number=word;
+	number = word;
 }
