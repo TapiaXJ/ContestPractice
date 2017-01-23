@@ -39,7 +39,7 @@ int main(){
                 primes[i] = false;
             }
 
-            int maxI = log(n)/log(p);
+            int maxI = round(log(n)/log(p));
             for(int i = 1; i < maxI + 1; i++){
                 result += n/(pow(p, i));
             }
