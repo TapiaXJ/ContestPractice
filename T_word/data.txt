@@ -1,0 +1,22 @@
+dip
+lip
+mad
+map
+maple
+may
+pad
+pip
+pod
+pop
+sap
+sip
+slice
+slick
+spice
+stick
+stock
+*
+slice stock
+sap pip
+sap pop
+may pod
