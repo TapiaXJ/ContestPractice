@@ -22,11 +22,11 @@ void get_data(vector< vector<Card> >&, vector<string>&);
 void print_data(vector< vector<Card> >&, vector<string>&, vector<int>&);
 void sortCards(vector<Card>&);
 
-int get_hand_score(vector<Card>&, vector<string>&);
+int get_hand_score(vector<Card>&, string&);
 int get_pairs(vector<Card>&);
 int get_hand_15(vector<Card>&);
 int get_flush(vector<Card>&,string&);
-int get_run(vector<Card>&);
+int get_run(vector<Card>&,string&);
 int get_nobs(vector<Card>&);
 
 int main(){
@@ -36,13 +36,12 @@ int main(){
 	int score=0;
 
 	get_data(hands, handTypes);
-	
-	//sort the hands
+	//sort the cards in each hand
 	for(int i = 0; i < hands.size(); i++){
 		sortCards(hands[i]);
 	}
 
-	//get each hands score
+	//get the score of each hand
 	for(int i=0; i<hands.size(); i++){
 		score = get_hand_score(hands[i],handTypes[i]);
 		scores.push_back(score);
@@ -59,49 +58,85 @@ int main(){
 
 int get_hand_score(vector<Card>& cards, string& type){
 	int score=0;
-	//OBscore += get_pairs(cards);
+	score += get_pairs(cards);
 	score += get_hand_15(cards);	
-	//score += get_flush(cards, type);
-	//score += get_run(cards);
-	//score += get_nobs(cards);
+	score += get_flush(cards, type);
+	score += get_run(cards,type);
+	score += get_nobs(cards);
 	return score;
 }
 
-int get_pairs(vector<Cards>& cards){
+int get_pairs(vector<Card>& cards){
+	int score =0;
+	int numPairs = 0;
 
+	for(int i = 1; i < cards.size(); i++){
+		if(cards[i-1].value == cards[i].value) {
+			numPairs++;
+		}
+	}
+
+	score = 2 * numPairs * numPairs - 1;
+	return score;
 }
 
-int get_hand_15(vector<Cards>& cards){
+int get_hand_15(vector<Card>& cards){
 	int tmp=0, start=0, score=0, total=15;
+	cout << "1\n";
 	while(start < cards.size()){
-		total -= cards[start];
+	cout << "2\n";
+		total -= cards[start].value;
 		if(total < 0){
-			for(int i=0; i<begin; i++){
-				if(total + cards[i]==0){
-					total += hand[start];
+			for(int i=0; i<start; i++){
+			cout << "3\n";
+				if(total + cards[i].value==0){
+					cout << "3a\n";
+					total += cards[start].value;
 					start++;
 					score+=2;
 					break;
-				}
+				}	
 			}
+			start++;
 		}
+		else{start++;}
+	cout << "4\n";
+	}
+	cout << "22\n";
+	return score;
+}
+
+int get_flush(vector<Card>& cards,string& type){	
+	//Check the first 4 cards
+	for(int i = 1; i < cards.size() - 1; i++){
+		if(cards[i-1].suit != cards[i].suit) {
+			return 0;
+		}
+	}
+
+	if(cards[0].suit == cards[cards.size() - 1].suit) {
+		return 5;
+	}
+
+	//If 4 card flush and crib, no points
+	if(type == "c"){
+		return 0;
+	}
+	else {
+		return 4;
 	}
 }
 
-int get_flush(vector<Cards>& cards,string& type){
-
+int get_run(vector<Card>& cards,string& type){
+	int score =0;
+	return score;
 }
 
-int get_run(vector<Cards>& cards,string& type){
+int get_nobs(vector<Card>& cards){
+	int score =0;
+	return score;
 
 }
-
-int get_nobs(vector<Cards>& cards){
-
-
-}
-
-
 
 void sortCards(vector<Card>& cards){
 	
@@ -146,14 +181,14 @@ char value_to_char(int value){
 
 void get_data(vector< vector<Card> >& hands, vector<string>& handTypes){
 	string temp;
+	string handTemp;
 	while(getline(cin, temp)){
 		vector<Card> cards;
-
-		istringstream iss(temp);
-
-		string handTemp;
+		
+		istringstream iss (temp);
 		iss >> handTemp;
 		handTypes.push_back(handTemp);
+
 
 		for(int i = 0; i < 4; i++){
 			iss >> handTemp;
@@ -168,6 +203,7 @@ void get_data(vector< vector<Card> >& hands, vector<string>& handTypes){
 	}
 	
 }
+
 
 void print_data(vector< vector<Card> >& hands, vector<string>& handTypes, vector<int>& scores){
 	for(int i = 0; i < hands.size(); i++){
