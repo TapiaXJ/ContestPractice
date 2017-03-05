@@ -57,8 +57,6 @@ int main(){
 		list<string>::iterator itr = LLdict.begin();
 		while(itr != LLdict.end()){
 			diff = compare(temp.data,*itr);
-			cout << "Comparing: " << temp.data << " " << *itr << endl;
-			cout<< "Comparing 2 values, diff: " << diff << " temp.diff: " << temp.diff << endl;
 			if(diff==1){
 				//cout <<"Difference was 1" << endl;
 				wordDiff t1(*itr,temp.diff+1);
@@ -83,8 +81,7 @@ int main(){
 int compare(string& s1, string& s2){
 	if(s1.length()!=s2.length()){return -1;} //-1 if not equal
 	int result=0;
-	
-	//cout << "COMPARING: " << s1 << " " << s2 << endl;	
+
 	for(int i=0; i<s1.length(); i++){
 		if(s1[i]!=s2[i]){result++;}	
 	}	
@@ -108,6 +105,5 @@ void get_data(vector<string>&data,vector<string>&problems){
 	while(cin >> temp){
 		problems.push_back(temp);
 	}
-	//cout << "Finished getting data" << endl;
 }
 

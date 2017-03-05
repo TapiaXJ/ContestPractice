@@ -16,7 +16,5 @@ spice
 stick
 stock
 *
-slice stock
-sap pip
-sap pop
+spice stock
 may pod
